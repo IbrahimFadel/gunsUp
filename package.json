@@ -1,0 +1,17 @@
+{
+  "name": "gunsup-master",
+  "version": "1.0.0",
+  "description": "This is a game that will hopefully be multiplayer, the players will navigate the map and try to kill the other players.",
+  "main": "gunsUp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
+  }
+}
