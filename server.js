@@ -46,6 +46,12 @@ const server = require('http').Server(app);
 const io = require('socket.io').listen(server);
 
 let arrayOfPlayers = [];
+let spawnPoints = [
+    {x : 0, y : 0},
+    {x : 750, y: 0},
+    {x : 0, y : 550},
+    {x : 750, y: 550}
+];
 
 server.listen(PORT, () => { // Listens to port 8081
     console.log('Listening on '+server.address().port);
@@ -55,8 +61,22 @@ io.on('connection', (socket) => {
     socket.on('newplayer', (data) => {
         console.log("a new player joined the game")
         console.log(data)
-        arrayOfPlayers.push(data);
+        let arrayOfPlayersLength = arrayOfPlayers.length;
+        player = {
+            x : spawnPoints[arrayOfPlayersLength].x,
+            y : spawnPoints[arrayOfPlayersLength].y
+        };
+
+        player.name = data;
+        // let the new player know who the current players are
+        // excluding him
         socket.emit('allplayers', arrayOfPlayers);
-        socket.broadcast.emit('newplayer', data);
+
+        // add new player to current players and acknowledge his existence
+        arrayOfPlayers.push(player);
+        socket.emit('selfplayer', player);
+
+        // let everybody know that there's a new player
+        socket.broadcast.emit('newplayer', player);
     });
 });
