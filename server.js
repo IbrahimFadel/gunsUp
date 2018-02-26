@@ -47,14 +47,14 @@ const io = require('socket.io').listen(server);
 
 let arrayOfPlayers = [];
 let spawnPoints = [
-    {x : 0, y : 0},
+    {x : 350, y : 350},
     {x : 750, y: 0},
     {x : 0, y : 550},
     {x : 750, y: 550}
 ];
 
 server.listen(PORT, () => { // Listens to port 8081
-    console.log('Listening on '+server.address().port);
+    console.log('Server listening on port '+server.address().port);
 });
 
 io.on('connection', (socket) => {
@@ -78,5 +78,16 @@ io.on('connection', (socket) => {
 
         // let everybody know that there's a new player
         socket.broadcast.emit('newplayer', player);
+
+        socket.player = player;
     });
+
+    socket.on('playermove', (lastDirection) => {
+        let moveObj = {
+            'player' : socket.player,
+            'direction' : lastDirection
+        };
+        socket.broadcast.emit('playermove', moveObj);
+        socket.emit('playermove', moveObj);
+    })
 });
